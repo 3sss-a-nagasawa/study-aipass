@@ -1,4 +1,4 @@
-"""feedback.py のテスト。ダミーデータで、問題文が送信内容に含まれないことを確認する。"""
+"""feedback.py のテスト。ダミーデータのみを使う。"""
 
 import json
 import random
@@ -19,13 +19,16 @@ class FeedbackTest(unittest.TestCase):
             quiz.submit_answer(self.exam, self.questions, index, [0])
         self.summary = quiz.summarize(self.exam, self.questions)
 
-    def test_payload_excludes_question_text(self):
-        """問題文・選択肢・解説が送信データに含まれないこと。"""
+    def test_payload_contents(self):
+        """全問の問題文を含み、誤答のみ選択肢・回答・正解を含むこと。"""
         payload = feedback.build_payload(self.exam, self.questions, self.summary)
-        text = json.dumps(payload, ensure_ascii=False)
-        for word in ("ダミー問題", "選択肢甲", "ダミー解説"):
-            self.assertNotIn(word, text)
         self.assertEqual(len(payload["answers"]), 60)
+        for entry, item in zip(payload["answers"], self.exam.items):
+            self.assertIn("ダミー問題", entry["question"])
+            self.assertEqual("answer" in entry, not item.is_correct)
+        self.assertIn("ダミー問題", feedback.build_prompt(payload))
+        # 解説は送信しない（トークン節約）
+        self.assertNotIn("ダミー解説", json.dumps(payload, ensure_ascii=False))
 
     def test_missing_api_key(self):
         """APIキー未設定時は FeedbackError になること。"""
