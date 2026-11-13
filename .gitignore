@@ -1,0 +1,40 @@
+# ===== 著作権への配慮：問題データ・公式シラバスは絶対にリモートへ反映しない =====
+
+# 問題データ（本番・アーカイブ・照合結果・試作を含む data/ 配下すべて）
+data/
+**/*.json
+!package.json
+!package-lock.json
+!.vscode/*.json
+
+# 公式シラバス（GUGAの著作物）
+syllabus/
+*.pdf
+
+# 問題データからの派生物
+*.csv
+*.tsv
+*.xlsx
+dist/
+build/
+out/
+export/
+exports/
+
+# バックアップ・作業用
+backup/
+backups/
+*.bak
+*.orig
+tmp/
+work/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS・エディタ
+Thumbs.db
+desktop.ini
+.DS_Store
