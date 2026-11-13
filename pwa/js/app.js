@@ -365,5 +365,13 @@
     showMessage("");
     route();
   });
-  window.addEventListener("load", route);
+  window.addEventListener("load", () => {
+    route();
+    // オフライン対応（HTTPS または localhost でのみ有効）
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js").catch(() => { /* 未対応環境では何もしない */ });
+    }
+    // 端末のデータが自動で消されにくくなるよう永続化を要求する
+    if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+  });
 })();
