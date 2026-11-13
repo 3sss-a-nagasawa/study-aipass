@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  {% include "_question_header.html" %}
+  <p class="verdict {{ 'correct' if item.is_correct else 'wrong' }}">
+    {{ '○ 正解' if item.is_correct else '× 不正解' }}
+  </p>
+  <ul class="choices">
+    {% for choice in choices %}
+      {% set is_answer = choice.original_index in question.answer %}
+      {% set is_selected = choice.original_index in item.selected %}
+      <li class="choice judged {{ 'is-answer' if is_answer }} {{ 'is-wrong-pick' if is_selected and not is_answer }}">
+        <span class="choice-label">{{ "ABCD"[choice.display_index] }}</span>
+        <span>{{ choice.text }}</span>
+        <span class="tags">
+          {% if is_selected %}<span class="tag">あなたの回答</span>{% endif %}
+          {% if is_answer %}<span class="tag answer">正解</span>{% endif %}
+        </span>
+      </li>
+    {% endfor %}
+  </ul>
+  <div class="explanation">
+    <h2>解説</h2>
+    <p>{{ question.explanation }}</p>
+  </div>
+  {% if exam.is_finished %}
+    <a class="button primary" href="{{ url_for('result') }}">結果を見る</a>
+  {% else %}
+    <a class="button primary" href="{{ url_for('question') }}">次の問題へ</a>
+  {% endif %}
+</section>
+{% endblock %}

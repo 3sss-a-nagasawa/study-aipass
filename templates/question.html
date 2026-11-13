@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  {% include "_question_header.html" %}
+  <form method="post" action="{{ url_for('answer', index=index) }}">
+    <ul class="choices">
+      {% for choice in choices %}
+        <li>
+          <label class="choice">
+            <input type="{{ 'checkbox' if question.type == 'multiple' else 'radio' }}"
+                   name="choice" value="{{ choice.display_index }}"
+                   {% if question.type != 'multiple' %}required{% endif %}>
+            <span class="choice-label">{{ "ABCD"[choice.display_index] }}</span>
+            <span>{{ choice.text }}</span>
+          </label>
+        </li>
+      {% endfor %}
+    </ul>
+    <button type="submit" class="button primary">回答する</button>
+  </form>
+</section>
+{% endblock %}

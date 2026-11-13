@@ -57,5 +57,40 @@ h2 { font-size: 1.15rem; }
 .button.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
 .button:disabled { opacity: 0.5; cursor: not-allowed; }
 
+/* 進捗表示 */
+.progress { display: flex; justify-content: space-between; font-weight: bold; }
+.progress-bar { height: 6px; background: var(--border); border-radius: 3px; margin: 6px 0 12px; }
+.progress-bar > div { height: 100%; background: var(--primary); border-radius: 3px; }
+
+.question-text { font-size: 1.1rem; white-space: pre-wrap; }
+
+/* 選択肢 */
+.choices { list-style: none; padding: 0; margin: 16px 0; }
+.choices li { margin-bottom: 8px; }
+.choice {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+label.choice:hover { border-color: var(--primary); }
+.choice input { margin-top: 6px; }
+.choice-label { font-weight: bold; min-width: 1.2em; }
+.choice.judged { cursor: default; }
+.choice.is-answer { border-color: var(--correct); background: var(--correct-bg); }
+.choice.is-wrong-pick { border-color: var(--wrong); background: var(--wrong-bg); }
+.tags { margin-left: auto; white-space: nowrap; }
+.tag { font-size: 0.8rem; padding: 1px 6px; border-radius: 4px; background: var(--border); }
+.tag.answer { background: var(--correct); color: #fff; }
+
+/* 判定 */
+.verdict { font-size: 1.3rem; font-weight: bold; }
+.verdict.correct { color: var(--correct); }
+.verdict.wrong { color: var(--wrong); }
+.explanation { border-top: 1px solid var(--border); margin-top: 16px; }
+
 .flash { background: #fff7e6; border: 1px solid #f5c26b; padding: 8px 12px; border-radius: 6px; }
 .muted { color: var(--muted); font-size: 0.9rem; }

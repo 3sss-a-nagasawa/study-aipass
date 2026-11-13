@@ -8,8 +8,13 @@
     <li>回答後に前の問題へ戻って回答し直すことはできません。</li>
     <li>最後に正誤一覧と、AIによる総評を表示します。</li>
   </ul>
+  {% if exam_in_progress %}
+    <p><a class="button" href="{{ url_for('question') }}">受験中の試験を続ける</a></p>
+  {% endif %}
   <form method="post" action="{{ url_for('index') }}">
-    <button type="submit" class="button primary" disabled>試験を開始する（準備中）</button>
+    <button type="submit" class="button primary">
+      {% if exam_in_progress %}最初から新しい試験を始める{% else %}試験を開始する{% endif %}
+    </button>
   </form>
 </section>
 {% endblock %}

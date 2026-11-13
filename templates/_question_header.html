@@ -1,0 +1,9 @@
+{# 問題番号・進捗・問題文の共通表示 #}
+<div class="progress">
+  <span>第 {{ index + 1 }} 問 / {{ exam.items|length }} 問</span>
+  <span class="muted">正解 {{ exam.correct_count }} / 回答 {{ exam.answered_count }}</span>
+</div>
+<div class="progress-bar"><div style="width: {{ (exam.answered_count / exam.items|length * 100)|round(1) }}%"></div></div>
+<p class="muted">第{{ question.chapter }}章 {{ question.syllabusRef }} {{ question.section }}
+  ／ {% if question.type == 'multiple' %}複数選択{% else %}単一選択{% endif %}</p>
+<p class="question-text">{{ question.question }}</p>
