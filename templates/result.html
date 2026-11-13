@@ -8,8 +8,30 @@
 
 <section class="card" id="feedback">
   <h2>AIによる総評</h2>
-  {% block feedback %}<p class="muted">準備中です。</p>{% endblock %}
+  <p class="muted">送信するのは正誤の集計と中項目などの情報のみで、問題文は送信しません。</p>
+  <div id="feedback-body" class="feedback-text">総評を生成しています…</div>
+  <button type="button" id="feedback-retry" class="button" hidden>再試行する</button>
 </section>
+<script>
+  // 結果表示後に総評を取得する（生成に時間がかかるため非同期）
+  async function loadFeedback() {
+    const body = document.getElementById("feedback-body");
+    const retry = document.getElementById("feedback-retry");
+    body.textContent = "総評を生成しています…";
+    retry.hidden = true;
+    try {
+      const response = await fetch("{{ url_for('result_feedback') }}", { method: "POST" });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "総評を取得できませんでした");
+      body.textContent = data.feedback;
+    } catch (error) {
+      body.textContent = error.message;
+      retry.hidden = false;
+    }
+  }
+  document.getElementById("feedback-retry").addEventListener("click", loadFeedback);
+  loadFeedback();
+</script>
 
 <section class="card">
   <h2>分野別の正答率</h2>

@@ -1,7 +1,8 @@
 """生成AIパスポート模擬試験アプリ（Flask）。この端末だけで使う。"""
 
-from flask import Flask, abort, flash, redirect, render_template, request, session, url_for
+from flask import Flask, abort, flash, jsonify, redirect, render_template, request, session, url_for
 
+import feedback
 import quiz
 from config import Config
 
@@ -106,6 +107,23 @@ def create_app(config_object=Config):
             summary=quiz.summarize(exam, questions),
             review=quiz.build_review(exam, questions),
         )
+
+    @app.route("/result/feedback", methods=["POST"])
+    def result_feedback():
+        """AIによる総評を生成して JSON で返す（生成済みなら再利用する）。"""
+        exam = get_current_exam()
+        if not exam.is_finished:
+            return jsonify({"error": "試験が終了していません"}), 400
+        if exam.feedback is None:
+            questions = get_questions()
+            payload = feedback.build_payload(exam, questions, quiz.summarize(exam, questions))
+            try:
+                exam.feedback = feedback.generate_feedback(
+                    app.config["GEMINI_API_KEY"], app.config["GEMINI_MODEL"], payload
+                )
+            except feedback.FeedbackError as error:
+                return jsonify({"error": str(error)}), 502
+        return jsonify({"feedback": exam.feedback})
 
     return app
 
