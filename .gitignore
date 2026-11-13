@@ -29,6 +29,11 @@ backups/
 tmp/
 work/
 
+# APIキーなどの秘密情報
+.env
+.env.*
+!.env.example
+
 # Python
 __pycache__/
 *.pyc

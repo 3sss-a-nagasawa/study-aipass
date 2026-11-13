@@ -1,0 +1,61 @@
+/* 全体の配色と基本レイアウト */
+:root {
+  --bg: #f6f7f9;
+  --card: #ffffff;
+  --text: #1f2933;
+  --muted: #6b7280;
+  --primary: #2563eb;
+  --correct: #15803d;
+  --correct-bg: #ecfdf3;
+  --wrong: #b91c1c;
+  --wrong-bg: #fef2f2;
+  --border: #d9dee5;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
+  line-height: 1.7;
+}
+
+.site-header {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  font-weight: bold;
+}
+.site-header a { color: var(--text); text-decoration: none; }
+
+.container { max-width: 820px; margin: 24px auto; padding: 0 16px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+
+h1 { font-size: 1.4rem; margin-top: 0; }
+h2 { font-size: 1.15rem; }
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+.button.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+.button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.flash { background: #fff7e6; border: 1px solid #f5c26b; padding: 8px 12px; border-radius: 6px; }
+.muted { color: var(--muted); font-size: 0.9rem; }

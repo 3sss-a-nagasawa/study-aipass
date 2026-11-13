@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <h1>模擬試験</h1>
+  <ul>
+    <li>全章からランダムに {{ question_count }} 問を出題します。</li>
+    <li>1問ごとに回答すると、その場で正誤を判定します。</li>
+    <li>回答後に前の問題へ戻って回答し直すことはできません。</li>
+    <li>最後に正誤一覧と、AIによる総評を表示します。</li>
+  </ul>
+  <form method="post" action="{{ url_for('index') }}">
+    <button type="submit" class="button primary" disabled>試験を開始する（準備中）</button>
+  </form>
+</section>
+{% endblock %}
