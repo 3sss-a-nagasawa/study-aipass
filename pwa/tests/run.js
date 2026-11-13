@@ -70,6 +70,19 @@ test("形式が不正な問題データを拒否すること", () => {
   assert.throws(() => Quiz.indexQuestions({ questions: [{ id: "x" }] }));
 });
 
+test("総評の送信データ: 全問の問題文を含み、誤答のみ選択肢・正解を含み、解説は含まないこと", () => {
+  const Feedback = require("../js/feedback.js");
+  const { questions, exam } = setup();
+  for (let index = 0; index < 60; index++) Quiz.submitAnswer(exam, questions, index, [0]);
+  const payload = Feedback.buildPayload(exam, questions, Quiz.summarize(exam, questions));
+  assert.strictEqual(payload.answers.length, 60);
+  payload.answers.forEach((entry, index) => {
+    assert.ok(entry.question.startsWith("ダミー問題"));
+    assert.strictEqual("answer" in entry, !exam.items[index].isCorrect);
+  });
+  assert.ok(!JSON.stringify(payload).includes("ダミー解説"));
+});
+
 let failed = 0;
 tests.forEach(({ name, body }) => {
   try {
