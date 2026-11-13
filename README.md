@@ -53,9 +53,13 @@ $env:PYTHONUTF8='1'; .\.venv\Scripts\python.exe -m unittest discover -s tests -t
 
 ### APIキーの安全設定（Google Cloud コンソール）
 
-- PWA 専用のキーを発行し、「API の制限」を Generative Language API のみにする。
-- 「アプリケーションの制限」を HTTP リファラー `https://3sss-a-nagasawa.github.io/*` にする。
-- 利用量の上限と予算アラートを設定する。
+- PWA 専用のキーを AI Studio で発行する。新形式の認証キー（`AQ.…`）は既定で Gemini API のみに制限されている。
+- 認証キーはウェブサイト（HTTP リファラー）制限に対応していないため、アプリケーションの制限は「なし」とする。
+- 代わりに次で被害を抑える。
+  - キーはコード・GitHub に含めず、端末の設定画面でのみ入力する。
+  - Generative Language API の割り当てで「1日あたりのリクエスト数」を低く（例: 50）設定する。
+  - 課金を有効にしている場合は予算アラートを設定する。
+  - 漏えいの疑いがあれば AI Studio でキーを削除し、作り直して端末に入れ直す。
 
 ### テスト
 
