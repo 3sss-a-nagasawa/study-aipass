@@ -36,6 +36,33 @@ $env:PYTHONUTF8='1'; .\.venv\Scripts\python.exe -m unittest discover -s tests -t
 
 テストはダミーデータのみを使い、本物の問題文は含めません。
 
+## PWA版（iPhone 用・GitHub Pages で配信）
+
+`pwa/` は Flask 版と同じ機能をブラウザだけで動かす版です。配信 URL: https://3sss-a-nagasawa.github.io/study-aipass/
+
+- 配信されるのはアプリのコードのみ。問題データ・APIキー・履歴は端末のブラウザ内（localStorage）にのみ保存する。
+- `main` への push で `.github/workflows/pages.yml` が配信する。配信前にテストと、JSON・APIキーが含まれないことの確認を行う。
+- アプリを更新したら `pwa/sw.js` の `CACHE_VERSION` を上げる（端末のキャッシュを更新するため）。
+
+### iPhone での使い方
+
+1. Safari で配信 URL を開き、「共有 → ホーム画面に追加」。
+2. `data/all.json` を iCloud Drive などに置き、アプリの「問題データを取り込む」で選ぶ。
+3. 「設定」で Gemini の APIキーを入力する。
+4. 端末のデータは長期間使わないと消えることがあるため、「設定 → 受験履歴のバックアップ」で定期的に書き出す。
+
+### APIキーの安全設定（Google Cloud コンソール）
+
+- PWA 専用のキーを発行し、「API の制限」を Generative Language API のみにする。
+- 「アプリケーションの制限」を HTTP リファラー `https://3sss-a-nagasawa.github.io/*` にする。
+- 利用量の上限と予算アラートを設定する。
+
+### テスト
+
+```powershell
+node pwa/tests/run.js
+```
+
 ## 構成
 
 | ファイル | 役割 |
@@ -45,7 +72,8 @@ $env:PYTHONUTF8='1'; .\.venv\Scripts\python.exe -m unittest discover -s tests -t
 | `quiz.py` | 出題・採点・集計（画面に依存しない） |
 | `feedback.py` | Gemini API による総評生成 |
 | `templates/`, `static/` | 画面 |
-| `tools/` | 問題データの検証・統合スクリプト |
+| `tools/` | 問題データの検証・統合スクリプト、アイコン生成 |
+| `pwa/` | PWA版（`js/quiz.js` は `quiz.py` の移植） |
 
 ## 使用モデル
 
