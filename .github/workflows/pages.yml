@@ -40,7 +40,8 @@ jobs:
           if find _site -name "*.json" | grep -q .; then
             echo "配信物に JSON ファイルが含まれています"; exit 1
           fi
-          if grep -rEq "AIza[0-9A-Za-z_-]{20,}" _site; then
+          # 旧形式（AIza…）と新形式の認証キー（AQ.…）の両方を検出する
+          if grep -rEq "AIza[0-9A-Za-z_-]{20,}|AQ\.[0-9A-Za-z_-]{30,}" _site; then
             echo "配信物に APIキーらしき文字列が含まれています"; exit 1
           fi
 
