@@ -92,5 +92,20 @@ label.choice:hover { border-color: var(--primary); }
 .verdict.wrong { color: var(--wrong); }
 .explanation { border-top: 1px solid var(--border); margin-top: 16px; }
 
+/* 結果ページ */
+.score-value { font-size: 1.6rem; margin: 0; }
+.score-value strong { font-size: 2.2rem; color: var(--primary); }
+.stats { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+.stats th { text-align: left; font-weight: normal; padding: 3px 8px 3px 0; }
+.stats td { padding: 3px 6px; white-space: nowrap; }
+.bar-cell { width: 35%; }
+.bar { height: 10px; background: var(--primary); border-radius: 3px; }
+.review { border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; margin-bottom: 8px; }
+.review.wrong { border-color: var(--wrong); }
+.review summary { cursor: pointer; }
+.review.correct .mark { color: var(--correct); font-weight: bold; }
+.review.wrong .mark { color: var(--wrong); font-weight: bold; }
+h3 { font-size: 1rem; margin-bottom: 4px; }
+
 .flash { background: #fff7e6; border: 1px solid #f5c26b; padding: 8px 12px; border-radius: 6px; }
 .muted { color: var(--muted); font-size: 0.9rem; }

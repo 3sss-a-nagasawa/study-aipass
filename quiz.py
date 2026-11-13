@@ -109,6 +109,52 @@ def display_choices(question, item):
     ]
 
 
+def summarize(exam, questions):
+    """章別・中項目別・形式別の正答数を集計する（問題文は含めない）。"""
+
+    def add(table, key, label, is_correct):
+        row = table.setdefault(key, {"key": key, "label": label, "total": 0, "correct": 0})
+        row["total"] += 1
+        row["correct"] += 1 if is_correct else 0
+
+    by_chapter, by_section, by_type = {}, {}, {}
+    for item in exam.items:
+        question = questions[item.question_id]
+        add(by_chapter, question["chapter"], f"第{question['chapter']}章", item.is_correct)
+        add(by_section, question["syllabusRef"], question["section"], item.is_correct)
+        type_label = "複数選択" if question["type"] == "multiple" else "単一選択"
+        add(by_type, question["type"], type_label, item.is_correct)
+
+    def to_list(table):
+        rows = [table[key] for key in sorted(table)]
+        for row in rows:
+            row["rate"] = round(row["correct"] / row["total"] * 100) if row["total"] else 0
+        return rows
+
+    return {
+        "total": len(exam.items),
+        "correct": exam.correct_count,
+        "by_chapter": to_list(by_chapter),
+        "by_section": to_list(by_section),
+        "by_type": to_list(by_type),
+    }
+
+
+def build_review(exam, questions):
+    """結果一覧用に、各問の表示用データ（回答・正解の本文）を作る。"""
+    rows = []
+    for number, item in enumerate(exam.items, start=1):
+        question = questions[item.question_id]
+        rows.append({
+            "number": number,
+            "question": question,
+            "is_correct": item.is_correct,
+            "selected_texts": [question["choices"][index] for index in item.selected or []],
+            "answer_texts": [question["choices"][index] for index in question["answer"]],
+        })
+    return rows
+
+
 class ExamStore:
     """試験の状態をメモリ上に保持する（ローカル単一利用者向け）。"""
 

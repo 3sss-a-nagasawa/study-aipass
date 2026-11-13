@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card score">
+  <h1>試験結果</h1>
+  <p class="score-value">{{ summary.total }}問中 <strong>{{ summary.correct }}</strong>問正解</p>
+  <p class="muted">正答率 {{ (summary.correct / summary.total * 100)|round|int }}%</p>
+</section>
+
+<section class="card" id="feedback">
+  <h2>AIによる総評</h2>
+  {% block feedback %}<p class="muted">準備中です。</p>{% endblock %}
+</section>
+
+<section class="card">
+  <h2>分野別の正答率</h2>
+  {% for title, rows in [("章別", summary.by_chapter), ("形式別", summary.by_type), ("中項目別", summary.by_section)] %}
+    <h3>{{ title }}</h3>
+    <table class="stats">
+      {% for row in rows %}
+        <tr>
+          <th>{% if title == "中項目別" %}{{ row.key }} {% endif %}{{ row.label }}</th>
+          <td>{{ row.correct }}/{{ row.total }}</td>
+          <td class="bar-cell"><div class="bar" style="width: {{ row.rate }}%"></div></td>
+          <td>{{ row.rate }}%</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% endfor %}
+</section>
+
+<section class="card">
+  <h2>正誤一覧</h2>
+  {% for row in review %}
+    <details class="review {{ 'correct' if row.is_correct else 'wrong' }}" {% if not row.is_correct %}open{% endif %}>
+      <summary>
+        <span class="mark">{{ '○' if row.is_correct else '×' }}</span>
+        第{{ row.number }}問　<span class="muted">第{{ row.question.chapter }}章 {{ row.question.syllabusRef }} {{ row.question.section }}</span>
+      </summary>
+      <p class="question-text">{{ row.question.question }}</p>
+      <p><strong>あなたの回答：</strong>{{ row.selected_texts|join(" ／ ") }}</p>
+      {% if not row.is_correct %}
+        <p><strong>正解：</strong>{{ row.answer_texts|join(" ／ ") }}</p>
+        <div class="explanation">
+          <h3>なぜ間違いか</h3>
+          <p>{{ row.question.explanation }}</p>
+        </div>
+      {% endif %}
+    </details>
+  {% endfor %}
+</section>
+
+<form method="post" action="{{ url_for('index') }}">
+  <button type="submit" class="button primary">もう一度受験する</button>
+</form>
+{% endblock %}

@@ -95,11 +95,17 @@ def create_app(config_object=Config):
 
     @app.route("/result")
     def result():
-        """結果ページ（タスク5で実装）。"""
+        """結果ページ。スコア・分野別正答率・60問の正誤一覧を表示する。"""
         exam = get_current_exam()
         if not exam.is_finished:
             return redirect(url_for("question"))
-        return f"{len(exam.items)}問中 {exam.correct_count}問正解"
+        questions = get_questions()
+        return render_template(
+            "result.html",
+            exam=exam,
+            summary=quiz.summarize(exam, questions),
+            review=quiz.build_review(exam, questions),
+        )
 
     return app
 
