@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <h1>受験履歴</h1>
+  {% if records %}
+    <table class="stats history">
+      <tr><th>受験日時</th><th>スコア</th><th>正答率</th><th>AI総評</th></tr>
+      {% for record in records %}
+        <tr>
+          <td><a href="{{ url_for('history_detail', exam_id=record.exam_id) }}">{{ record.finished_at|replace("T", " ") }}</a></td>
+          <td>{{ record.correct }}/{{ record.total }}</td>
+          <td>{{ (record.correct / record.total * 100)|round|int }}%</td>
+          <td>{{ 'あり' if record.feedback else '—' }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p class="muted">まだ受験履歴はありません。</p>
+  {% endif %}
+</section>
+{% endblock %}

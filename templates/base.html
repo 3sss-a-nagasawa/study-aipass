@@ -9,6 +9,7 @@
 <body>
   <header class="site-header">
     <a href="{{ url_for('index') }}">生成AIパスポート 模擬試験</a>
+    <a class="header-link" href="{{ url_for('history_list') }}">受験履歴</a>
   </header>
   <main class="container">
     {% with messages = get_flashed_messages() %}

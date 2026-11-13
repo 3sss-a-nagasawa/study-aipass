@@ -29,6 +29,9 @@ backups/
 tmp/
 work/
 
+# 受験履歴（スコア・AI総評。問題内容に触れるためローカルのみ）
+history/
+
 # APIキーなどの秘密情報
 .env
 .env.*

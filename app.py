@@ -3,6 +3,7 @@
 from flask import Flask, abort, flash, jsonify, redirect, render_template, request, session, url_for
 
 import feedback
+import history
 import quiz
 from config import Config
 
@@ -101,10 +102,13 @@ def create_app(config_object=Config):
         if not exam.is_finished:
             return redirect(url_for("question"))
         questions = get_questions()
+        summary = quiz.summarize(exam, questions)
+        # 試験単位のスコアを履歴に保存（初回表示時のみ新規作成）
+        history.save_record(app.config["HISTORY_DIR"], exam, summary)
         return render_template(
             "result.html",
             exam=exam,
-            summary=quiz.summarize(exam, questions),
+            summary=summary,
             review=quiz.build_review(exam, questions),
         )
 
@@ -116,14 +120,34 @@ def create_app(config_object=Config):
             return jsonify({"error": "試験が終了していません"}), 400
         if exam.feedback is None:
             questions = get_questions()
-            payload = feedback.build_payload(exam, questions, quiz.summarize(exam, questions))
+            summary = quiz.summarize(exam, questions)
+            payload = feedback.build_payload(exam, questions, summary)
             try:
                 exam.feedback = feedback.generate_feedback(
                     app.config["GEMINI_API_KEY"], app.config["GEMINI_MODEL"], payload
                 )
             except feedback.FeedbackError as error:
                 return jsonify({"error": str(error)}), 502
+            history.save_record(
+                app.config["HISTORY_DIR"], exam, summary, exam.feedback, app.config["GEMINI_MODEL"]
+            )
         return jsonify({"feedback": exam.feedback})
+
+    @app.route("/history")
+    def history_list():
+        """過去の試験のスコア一覧。"""
+        return render_template("history.html", records=history.list_records(app.config["HISTORY_DIR"]))
+
+    @app.route("/history/<exam_id>")
+    def history_detail(exam_id):
+        """過去の試験1件のスコアとAI総評。"""
+        try:
+            record = history.load_record(app.config["HISTORY_DIR"], exam_id)
+        except ValueError:
+            record = None
+        if record is None:
+            abort(404)
+        return render_template("history_detail.html", record=record)
 
     return app
 

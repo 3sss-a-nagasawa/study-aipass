@@ -28,7 +28,10 @@ body {
   padding: 12px 16px;
   font-weight: bold;
 }
+.site-header { display: flex; justify-content: space-between; }
 .site-header a { color: var(--text); text-decoration: none; }
+.site-header .header-link { font-weight: normal; color: var(--primary); }
+.stats.history th { font-weight: bold; }
 
 .container { max-width: 820px; margin: 24px auto; padding: 0 16px; }
 
