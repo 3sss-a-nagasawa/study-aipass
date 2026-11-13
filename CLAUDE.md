@@ -75,10 +75,12 @@
 
 ## 5. 作業ルール
 
-- Python は PowerShell から実行する（Bash には python がない）。
+- Python は PowerShell から、プロジェクトの仮想環境 `.venv` の Python で実行する（Bash には python がない）。
+  依存パッケージの追加は `.\.venv\Scripts\python.exe -m pip install` で行い、`requirements.txt` にバージョンを固定して記載する。
   ```powershell
-  $env:PYTHONUTF8='1'; python -I tools\validate.py data\chapter1.json; $LASTEXITCODE
+  $env:PYTHONUTF8='1'; .\.venv\Scripts\python.exe -I tools\validate.py data\chapter1.json; $LASTEXITCODE
   ```
+- PowerShell 5.1 の `Get-Content`/`Set-Content` で日本語ファイルを書き換えない（文字化けする）。編集は Edit ツールか Python で行う。
   コンソール出力は文字化けすることがあるため、成否は `$LASTEXITCODE` で判定する。
 - 日本語を含むファイルは UTF-8 で扱う。
 - 一括変更は問題データを手編集せずスクリプトで行う。作業前に必ずバックアップを取り、変更後は差分が意図した範囲だけか確認する。

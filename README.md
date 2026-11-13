@@ -12,9 +12,10 @@
 
 ## セットアップ
 
-1. 依存パッケージをインストールする。
+1. 仮想環境（venv）を作成し、依存パッケージをインストールする（`.venv/` は Git 追跡対象外）。
    ```powershell
-   pip install -r requirements.txt
+   python -m venv .venv
+   .\.venv\Scripts\python.exe -m pip install -r requirements.txt
    ```
 2. `.env.example` を `.env` にコピーし、`GEMINI_API_KEY` を設定する（`.env` は Git 追跡対象外）。
 3. `data/all.json` を配置する（`tools/merge.py` で生成）。
@@ -22,7 +23,7 @@
 ## 起動
 
 ```powershell
-$env:PYTHONUTF8='1'; python app.py
+$env:PYTHONUTF8='1'; .\.venv\Scripts\python.exe app.py
 ```
 
 ブラウザで http://127.0.0.1:5000/ を開く。
@@ -30,7 +31,7 @@ $env:PYTHONUTF8='1'; python app.py
 ## テスト
 
 ```powershell
-$env:PYTHONUTF8='1'; python -m unittest discover -s tests -t .
+$env:PYTHONUTF8='1'; .\.venv\Scripts\python.exe -m unittest discover -s tests -t .
 ```
 
 テストはダミーデータのみを使い、本物の問題文は含めません。
