@@ -81,7 +81,7 @@ def main():
         "meta": {
             "title": "生成AIパスポート 模擬問題集（全章）",
             "createdAt": "2026-11-12",
-            "syllabus": "2027年2月試験〜の新シラバス（報道・事業者サイトの情報に基づく。公式シラバスPDFとの項目照合は未実施）",
+            "syllabus": "2027年2月試験〜の新シラバス",
             "note": "オリジナル作成。answer は choices の0始まり添字の配列。volatile=true は要再確認。",
             "count": len(questions),
         },
