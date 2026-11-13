@@ -46,6 +46,10 @@ $env:PYTHONUTF8='1'; python -m unittest discover -s tests -t .
 | `templates/`, `static/` | 画面 |
 | `tools/` | 問題データの検証・統合スクリプト |
 
+## 使用モデル
+
+既定は `gemini-3.5-flash-lite`（`.env` の `GEMINI_MODEL` で変更可）。
+
 ## 採点・送信の仕様
 
 - 複数選択は、正解をすべて選び、余計な選択肢を選んでいない場合のみ正解。
